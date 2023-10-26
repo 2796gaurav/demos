@@ -1,0 +1,14 @@
+flask
+python-dotenv
+openai
+typesense
+bs4
+pandas
+llama-cpp-python
+torch
+torchvision
+torchaudio
+transformers @ git+https://github.com/huggingface/transformers
+accelerate
+optimum
+ipython-autotime

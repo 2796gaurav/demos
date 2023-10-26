@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        #about {
+            background-color: #fff;
+            padding: 30px;
+        }
+
+        #demos {
+            justify-content: space-around;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            /* background-color:; */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1500px;
+            }
+        }
+
+        h1 {
+            color: cadetblue;
+        }
+
+        h4 {
+            color: cornflowerblue;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Gaurav Chauhan</a>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <section id="about" class="text-center">
+            <h1>Gaurav Chauhan 's Demos</h1>
+            <p>Some Demos which i had created to showcase the research, product or just experiment.</p>
+        </section>
+
+        <br />
+        <br />
+
+
+        <section id="about" class="text-center">
+
+            <p>All of these demos haven't been created from any plugins such as Langchain or Llama index.</p>
+            <p>The Motivation being to demonstrate the capabilities with going deeply on its implementation (how its
+                done internally).</p>
+            <p>All of these product are MVP.</p>
+        </section>
+
+        <section id="demos" class="row my-5">
+
+
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="../static/images/1.png" class="card-img-top" alt="Demo 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Creat your own chatbot.</h4>
+                        <p class="card-text">product where you can provide your (or any) URL.
+                            <br>
+                            System would scrape and create chatbot from it.
+                        </p>
+                        <hr>
+                        <h5>Showcases:</h5>
+                        <ul>
+                            <li>From one parent URL going 2 levels deep to find all child url's.</li>
+                            <li>Scraping the Child URL's (only scraping 100 URL's for demo).</li>
+                            <li>Extracting the data like title, header, content.</li>
+                            <li>Converting the content to embedding (openai embedding).</li>
+                            <li>Storing the data + embedding values in Vector Database.</li>
+                            <li>Based on Vector Database you can chat with your own data.</li>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="../static/images/2.png" class="card-img-top" alt="Demo 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Chatbot with Openai or LLama2 Models with added functionality of speech
+                            support input.</h4>
+                        <p class="card-text">You can chat with chatbot using text or speech. You have even functionality
+                            of selecting your model for chatbot. whether you need Openai GPT3 or Llama2 model.</p>
+                        <hr>
+                        <h5>Showcases:</h5>
+                        <ul>
+                            <li>Chat with your own data (from data scrap ID or general).</li>
+                            <li>Selecting model to chat. Openai or Llama2 (Local).</li>
+                            <li>Input of Voice Support. As an input of voice can also be provided. Internally Openai
+                                Whisper is used to convert speech to text.</li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="../static/images/3.png" class="card-img-top" alt="Demo 1">
+                    <div class="card-body">
+                        <h4 class="card-title">Chatbot with Data Checks for better reliability.</h4>
+                        <p class="card-text">In this chatbot there is an added layer of checks from user input whether
+                            the user is using harmful sentences or they needed human support (so we would redicrect to
+                            Human support and not waste their time chatting with chatbot).
+                            <br> For this we are using openai functions to perform user data checks.
+                        </p>
+                        <hr>
+                        <h5>Showcases:</h5>
+                        <ul>
+                            <li>Adding Openai Functions acting as user input validator to check user inputs and thereby
+                                make a decision.</li>
+                            <li>As an application this helps to restrict harmful users to not use our bot (or to
+                                safeguard our model) and if the user really need human support then directly redirect
+                                them to one.</li>
+                            <li>Through Openai Functions we can add other generative conditions based on user input and
+                                can get answer based on our functions.</li>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const cardTitle = card.querySelector('.card-title');
+                const cardUrl = getCardUrl(cardTitle
+                .textContent); // Define a function to get the URL for each card title.
+
+                card.addEventListener('click', () => {
+                    window.location.href =
+                    cardUrl; // Redirect to the URL when the card is clicked.
+                });
+            });
+
+            // Define a function to get the URL based on the card title.
+            function getCardUrl(title) {
+                switch (title) {
+                    case "Creat your own chatbot.":
+                        return "scrap";
+                    case "Chatbot with Openai or LLama2 Models with added functionality of speech support input.":
+                        return "chat";
+                    case "Chatbot with Data Checks for better reliability.":
+                        return "api_calling";
+                    default:
+                        return "#"; // Default URL or handle unknown card titles.
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

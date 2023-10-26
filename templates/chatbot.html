@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> Dummy Chat </title>
+    <!-- CSS only -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+    <style>
+        .search-bar {
+            margin-top: 100px;
+        }
+
+        .ol-result {
+            padding: 5px;
+            list-style-type: none;
+            list-style-position: inside;
+            min-width: 20em;
+            /* background-color: red !important; */
+            z-index: 1;
+            width: 300px;
+            overflow: auto;
+            height: 480px;
+            text-align: justify;
+            /* scrollbar-width: thin;  */
+            scrollbar-color: rgb(183, 10, 10) rgb(9, 32, 202);
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            /* adjust the width to your liking */
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+            /* adjust the background color to your liking */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #5f1786;
+            /* adjust the thumb color to your liking */
+        }
+
+        .results>.ol-result>li {
+            border-bottom: 2px solid #5f1786;
+        }
+
+
+        .radioButtons {
+            /* background-color: red; */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-options {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-options label {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        .filter-options select {
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid gray;
+            border-radius: 5px;
+            width: 500px;
+        }
+
+        #search-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+        }
+
+        /* .dropdown-menu {
+  display:none;
+  position: relative;
+  z-index: 1;
+  left: 0;
+  top: 100%;
+}
+
+
+.dropdown-menu .form-check {
+  padding: 10px;
+} */
+
+        /* .attribute{
+  display:flex;
+  flex-direction: column;
+} */
+
+
+
+        .dropdown-button {
+            background-color: white;
+            color: black;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            margin-top: 25px;
+            margin-left: 100px;
+            width: 200px;
+        }
+
+        .option-button {
+            /* background-color: red; */
+            color: black;
+            /* padding: 16px; */
+            font-size: 16px;
+            /* border: none; */
+            cursor: pointer;
+            /* margin-top: 250px;*/
+            margin-left: 50px;
+            width: 180px;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            width: 30rem;
+            background-color: white;
+            /* min-width: 160px; */
+            width: auto;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            margin-left: 120px;
+        }
+
+        .option-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            left: -79px;
+            top: 565px;
+            min-width: 160px;
+            width: 100px;
+            ;
+            /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+            z-index: 1;
+            margin-left: 300px;
+            /* background-color:aqua; */
+
+        }
+
+        .option-content.show {
+            display: block;
+        }
+
+        .dropdown-content li {
+            /* list-style: none; */
+            padding: 12px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            /* margin-left:5px; */
+            /* width:25rem; */
+
+        }
+
+        .option-content ul {
+            padding: 12px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            /* margin-left:5px; */
+            width: 14rem;
+            list-style-type: none;
+
+        }
+
+
+
+        .dropdown-content input[type="radio"] {
+            margin-right: 8px;
+            margin-left: 8px;
+        }
+
+        .dropdown-content input[type="text"] {
+            margin-left: 14px;
+        }
+
+        .dropdown-content input[type="number"] {
+            margin-left: 14px;
+            /* width:4rem  !important; */
+        }
+
+
+
+        .dropdown-content li:hover {
+            background-color: lightskyblue;
+        }
+
+        .option-content ul:hover {
+            background-color: lightskyblue;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+        }
+
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .ol-result {
+            position: absolute;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+
+        #submit-btn {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 10px 30px;
+            font-size: 14px;
+            margin-top: 3rem;
+            /* margin-left:1rem; */
+            margin-bottom: 1rem;
+            margin-right: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #btn {
+            /* width: 20%; */
+            height: 50px;
+        }
+
+        #reset-btn {
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 10px 30px;
+            font-size: 14px;
+            margin-top: 3rem;
+            margin-left: 1rem;
+            display: flex;
+            margin-bottom: 1rem;
+            margin-right: 0.5rem;
+            /* flex-direction: column; */
+            align-items: center;
+        }
+
+
+        #submit-btn:active {
+            transform: translateY(2px);
+        }
+
+        #reset-btn:active {
+            transform: translateY(2px);
+        }
+
+        .resetapplycolor {
+            background-color: white !important;
+        }
+
+        /* 
+#infix-color{
+  background-color: #ccc;
+}
+
+.color-changed {
+  background-color: #f00;
+} */
+
+        .desTable {
+            overflow: scroll;
+        }
+
+        form {
+
+            overflow: hidden;
+
+        }
+
+        input {
+            width: 100%;
+        }
+
+        span {
+            display: block;
+            overflow: hidden;
+            padding-right: 10px;
+        }
+
+        button {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Gaurav Chauhan | Go to homepage</a>
+        </nav>
+    </header>
+    <div class="row">
+        <h1 style=" white-space: nowrap;margin-top: 2rem !important; margin:auto; text-align: center;"><u>Chatbot</u>
+        </h1>
+
+
+
+
+
+        <div class="container">
+            <div class="row">
+
+
+                <div class="page-content page-container" id="page-content">
+                    <div class="padding">
+                        <div class="row container d-flex justify-content-center">
+                            <div class="col-md-12">
+                                <h5>Showcases:</h5>
+                                <ul>
+                                    <li>Chat with your own data (from data scrap ID or general).</li>
+                                    <li>Selecting model to chat. Openai or Llama2 (Local).</li>
+                                    <li>Input of Voice Support. As an input of voice can also be provided. Internally
+                                        Openai Whisper is used to convert speech to text.</li>
+
+                                </ul>
+                                <hr>
+
+                                <div class="card card-bordered">
+                                    <div class="card-header">
+                                        <h4 class="card-title"><strong>Bot</strong></h4>
+                                        <!-- <a class="btn btn-xs btn-secondary" href="#" data-abc="true">Help</a> -->
+                                    </div>
+
+
+                                    <div class="ps-container ps-theme-default ps-active-y" id="chat-content"
+                                        style="overflow-y: scroll !important; height:400px !important;">
+                                        <div class="media media-chat">
+                                            <div class="media-body">
+                                                <p>Hi, How are you? What is your Question?</p>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                    </div>
+
+                                    <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;">
+                                        <div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+                                    </div>
+                                    <div class="ps-scrollbar-y-rail" style="top: 0px; height: 0px; right: 2px;">
+                                        <div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 2px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="publisher bt-1 border-light" style="border: 3px solid #5f1786;">
+                                    <img class="avatar avatar-xs"
+                                        src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                    <input class="publisher-input" type="text" id="text_user"
+                                        onkeypress="onTestChange();" placeholder="Write something... and press enter">
+                                    <span class="publisher-btn file-group">
+                                        <i class="fa fa-paperclip file-browser"></i>
+                                        <input type="file">
+                                    </span>
+                                    <a class="publisher-btn" href="#" data-abc="true"><i class="fa fa-smile"></i></a>
+                                    <a class="publisher-btn text-info" href="#" data-abc="true"><i
+                                            class="fa fa-paper-plane"></i></a>
+                                </div>
+                                <hr>
+                                <hr>
+
+                                <div class="col-md-12">
+                                    <p>Data ID. For Testing you can enter "car_review" or "indian_tourist". and you can
+                                        chat based on the topic you mentioned.</p>
+                                    <p>Else the ID which you might have recieved in Scraping can be entered to chat with
+                                        your data.</p>
+                                    <input type="text" id="val_id" class="form-control"
+                                        placeholder=" Enter Data ID"></input>
+                                </div>
+                                <hr>
+
+                                <div class="col-md-6">
+                                    <h5>Model Select</h5>
+                                    <button class="btn btn-dark btn-model" style="float: inherit;"
+                                        onclick="btnClick('GPT-3')">GPT-3</button>
+                                    <button class="btn btn-light btn-model" style="float: inherit;"
+                                        onclick="btnClick('Llama-2')">Llama-2</button>
+                                </div>
+                                <br>
+
+                                <div class="col-md-12">
+                                    <h5>Voice Support</h5>
+                                    <button id="startRecording" class="btn btn-info" style="float: inherit;">
+                                        <span class="bi bi-record-circle"></span> Start Recording
+                                    </button>
+                                    <button id="stopRecording" class="btn btn-warning" style="float: inherit;"
+                                        disabled="">
+                                        <span class="bi bi-stop-circle"></span> Stop Recording
+                                    </button>
+                                </div>
+
+
+
+
+
+
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous">
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+</script>
+<script>
+    $(document).ready(function () {
+        //$('#jumboanswer').hide()
+        val = localStorage.getItem("id");
+        $('#val_id').val(val);
+        localStorage.setItem("model", "openai");
+
+    });
+
+    function btnClick(name) {
+        localStorage.setItem("model", name);
+        const buttons = document.querySelectorAll('.btn-model');
+        buttons.forEach(button => {
+            // console.log(button.textContent.trim());
+            if (button.textContent.trim() === name) {
+                button.classList.add('btn-dark');
+                button.classList.remove('btn-light');
+            } else {
+                button.classList.remove('btn-dark');
+                button.classList.add('btn-light');
+
+            }
+        });
+    }
+
+
+
+    function onTestChange() {
+        var key = window.event.keyCode;
+
+        // If the user has pressed enter
+        if (key === 13) {
+
+            var inputValue = document.getElementById("val_id").value;
+            // Check if it's blank or its length is less than 2
+            if (inputValue.trim() === '' || inputValue.length < 2) {
+                alert("Data ID is not provided.");
+                return false;
+            }
+
+
+
+            user_question = document.getElementById("text_user").value;
+            document.getElementById("text_user").value = "";
+
+
+
+            const boxWrapper = document.getElementById("chat-content");
+            const box = document.createElement("div");
+            box.innerHTML = '<div class="media-body"> \
+                                    <p>' + user_question + '</p> \
+                                    </div>';
+            //box.style.backgroundColor = "orange";
+            box.classList.add("media");
+            box.classList.add("media-chat");
+            box.classList.add("media-chat-reverse");
+
+            boxWrapper.appendChild(box);
+
+            model = localStorage.getItem("model");
+            console.log(model);
+            id_v = document.getElementById('val_id').value;
+            console.log(id_v);
+
+            $.ajax({
+                method: "POST",
+                crossDomain: true,
+                url: "/chat/query",
+                data: JSON.stringify({
+                    "user_question": user_question,
+                    "model": model,
+                    "id": id_v
+                }),
+                contentType: "application/json",
+                success: function (result) {
+                    console.log(result);
+
+                    const boxWrapper = document.getElementById("chat-content");
+                    const box = document.createElement("div");
+                    box.innerHTML = '<div class="media-body"> \
+                                <p>' + result['answer'] + '</p> \
+                                <ul> \
+                                    Sources:' +
+                        result['source_links'].map(link => `<li><a href="${link}">${link}</a></li>`).join(
+                            '') +
+                        '</ul> \
+                            </div>';
+                    box.classList.add("media");
+                    box.classList.add("media-chat");
+
+                    boxWrapper.appendChild(box);
+                }
+            });
+
+
+
+
+            console.log("in");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // audio recording
+    let mediaRecorder;
+    let audioChunks = [];
+
+    const startRecordingButton = document.getElementById('startRecording');
+    const stopRecordingButton = document.getElementById('stopRecording');
+    const audioElement = document.getElementById('audioElement');
+
+    startRecordingButton.addEventListener('click', startRecording);
+    stopRecordingButton.addEventListener('click', stopRecording);
+
+    async function startRecording() {
+        audioChunks = [];
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = event => {
+                if (event.data.size > 0) {
+                    audioChunks.push(event.data);
+                }
+            };
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, {
+                    type: 'audio/wav'
+                });
+                //audioElement.src = URL.createObjectURL(audioBlob);
+                sendAudioData(audioBlob);
+            };
+            mediaRecorder.start();
+            startRecordingButton.disabled = true;
+            stopRecordingButton.disabled = false;
+        } catch (error) {
+            console.error('Error accessing microphone:', error);
+        }
+    }
+
+    function stopRecording() {
+        if (mediaRecorder.state === 'recording') {
+            mediaRecorder.stop();
+            startRecordingButton.disabled = false;
+            stopRecordingButton.disabled = true;
+        }
+    }
+
+    async function sendAudioData(audioBlob) {
+        const formData = new FormData();
+        formData.append('audio', audioBlob);
+
+        try {
+            const response = await fetch('/upload-audio', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.status === 200) {
+                const data = await response.json();
+                console.log(data);
+                $('#text_user').val(data.translated_text);
+            } else {
+                console.error('Failed to upload audio.');
+            }
+        } catch (error) {
+            console.error('Error while sending audio data:', error);
+        }
+    }
+
+    stopRecordingButton.disabled = true;
+</script>
+
+</html>

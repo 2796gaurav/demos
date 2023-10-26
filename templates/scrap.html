@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        .center-div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+        }
+
+        .loader {
+            border: 16px solid #f3f3f3;
+            /* Light grey */
+            border-top: 16px solid #3498db;
+            /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        body {
+            background-color: #f4f4f4;
+        }
+
+        #about {
+            background-color: #fff;
+            padding: 30px;
+        }
+
+        #demos {
+            justify-content: space-around;
+        }
+
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1500px;
+            }
+        }
+
+        h5 {
+            font-size: 25;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="/">Gaurav Chauhan | go to homepage</a>
+        </nav>
+    </header>
+
+    <div class="container-fluid">
+        <div class="center-div">
+            <div class="col-md-8 display_scrap">
+                <h2>Create your own chatbot.</h2>
+                <hr>
+                <h5>Showcases:</h5>
+                <ul>
+                    <li>From one parent URL going 2 levels deep to find all child url's.</li>
+                    <li>Scraping the Child URL's (only scraping 100 URL's for demo).</li>
+                    <li>Extracting the data like title, header, content.</li>
+                    <li>Converting the content to embedding (openai embedding).</li>
+                    <li>Storing the data + embedding values in Vector Database.</li>
+                    <li>Based on Vector Database you can chat with your own data.</li>
+
+                </ul>
+                <br>
+                <hr>
+                <div class="input-group">
+                    <input id="urlInput" type="text" class="form-control"
+                        placeholder="Enter URL for which you want the data to be scraped.">
+                    <span class="input-group-btn">
+                        <button id="searchButton" class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+                <br>
+                <div>
+                    <h5> Or, Some sample Topics which you can play with. All of them will be scraped from wikipedia.
+                    </h5>
+                    <h5 style="color: brown;"> To Note: It would take 5-10 mins for this activity as not on it scraps
+                        but also creates embedding and also load to Vector DB.</h5>
+                    <button class="btn btn-primary" type="button" onclick="select_section('indian_tourist')">Indian
+                        Tourist</button>
+                    <button class="btn btn-primary" type="button" onclick="select_section('car_review')">Car
+                        Reviews</button>
+
+                </div>
+                <div class="col-md-4" id="section_id"></div>
+            </div>
+            <div class="loader"></div>
+
+        </div>
+
+    </div>
+
+    <!-- Add a div to display the HTML table -->
+    <div id="table-header">
+        <h2></h2>
+    </div>
+    <div id="chat-btn"><a href="/chat" class="btn btn-success btn-lg active" style="float: right;" role="button"
+            aria-pressed="true">Chat with your Data (copy your ID)</a> </div>
+    </br>
+    <div id="table-container" class="col-md-12"
+        style="text-align: center; display: flex; justify-content: center; align-items: center;"></div>></div>
+
+    </div>
+
+    <script>
+        $(function () {
+            $(".loader").hide();
+            $("#section_id").html("");
+            $("#chat-btn").hide();
+            localStorage.setItem("predefined", "false");
+
+        });
+
+        function select_section(idval) {
+            localStorage.setItem("predefined", "true");
+            if (idval === "indian_tourist") {
+                $("#urlInput").val("https://www.indiatravelblog.com/");
+                localStorage.setItem("id", "indian_tourist");
+            } else if (idval === "car_review") {
+                $("#urlInput").val("https://indianautosblog.com/car-reviews");
+                localStorage.setItem("id", "car_review");
+            } else {
+                return false;
+            }
+        }
+
+        function generateId(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'; // Letters and digits
+            let randomId = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                randomId += characters.charAt(randomIndex);
+            }
+            return randomId;
+        }
+
+
+
+
+        $(document).ready(function () {
+            $("#searchButton").click(function () {
+
+                $("#table-header").html("");
+                $(".loader").show();
+                $("#chat-btn").hide();
+                var url = $("#urlInput").val();
+                if (localStorage.getItem("predefined") == "false") {
+                    var id_v = generateId(5);
+                } else {
+                    var id_v = localStorage.getItem("id");
+                }
+                var urlInput = document.getElementById("urlInput");
+
+                // Regular expression for URL validation
+                var urlPattern = /^(https?:\/\/)?([\da-zA-Z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/;
+
+                if (!urlPattern.test(url)) {
+                    alert("Incorrect URL. Please enter a valid URL.");
+                    $(".loader").hide();
+                    return;
+                }
+                localStorage.setItem("id", id_v);
+
+
+                $("#section_id").html("<h3>Your Data Scrap ID is " + id_v +
+                    " <br> Keep this in handy for chat and other demo purposes.</h3>");
+
+                $.ajax({
+                    type: "POST",
+                    url: "/scrap/v1",
+                    data: JSON.stringify({
+                        "scrap_url": url,
+                        "id": id_v
+                    }),
+                    contentType: "application/json",
+                    success: function (response) {
+                        $(".loader").hide();
+                        // Display the HTML table in the table-container div
+                        $("#chat-btn").show();
+                        $("#table-header").html(
+                            "<h5> For Demo we had only scraped around 100 links only.</h5>"
+                            );
+                        $("#table-container").load("/display/" + response.id);
+                    },
+                    error: function (err) {
+                        console.error("Error: " + err);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
