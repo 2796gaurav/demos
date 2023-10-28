@@ -15,8 +15,11 @@ This website, created by Gaurav Chauhan, serves as a portfolio showcasing variou
 ## Demos
 The website features several demos that highlight Gaurav Chauhan's expertise. Each demo is described below:
 
+## Demo Videos
+To get a quick overview of these demos, you can watch a video demonstration on [YouTube](https://www.youtube.com/embed/jEs21uQ9gvs).
+
 ### 1. Create Your Own Chatbot
-![Demo 1](../static/images/1.png)
+![Demo 1](static/images/1.png)
 - **Description**: This demo allows you to create a chatbot using a URL of your choice. The system scrapes the provided URL, extracts data such as title and content, and converts the content into embeddings using OpenAI embedding. The data and embedding values are stored in a Vector Database, allowing you to chat with your own data.
 - **Showcases**:
     - Scraping a URL and its child URLs.
@@ -26,7 +29,7 @@ The website features several demos that highlight Gaurav Chauhan's expertise. Ea
     - Chatting with your own data.
 
 ### 2. Chatbot with OpenAI or Llama2 Models
-![Demo 2](../static/images/2.png)
+![Demo 2](static/images/2.png)
 - **Description**: In this demo, you can chat with a chatbot using either text or speech input. You have the flexibility to select the model for the chatbot, choosing between OpenAI GPT3 or Llama2. Additionally, you can provide voice input, and OpenAI Whisper is used internally to convert speech to text.
 - **Showcases**:
     - Chatting with your own data.
@@ -34,7 +37,7 @@ The website features several demos that highlight Gaurav Chauhan's expertise. Ea
     - Voice input support using OpenAI Whisper.
 
 ### 3. Chatbot with Data Checks for Reliability
-![Demo 3](../static/images/3.png)
+![Demo 3](static/images/3.png)
 - **Description**: This chatbot demo includes an added layer of checks to validate user input. It assesses user inputs to determine if they contain harmful content or if the user requires human support. OpenAI functions are used for user data checks.
 - **Showcases**:
     - Adding OpenAI Functions for user input validation.
@@ -42,8 +45,6 @@ The website features several demos that highlight Gaurav Chauhan's expertise. Ea
     - Redirecting users to human support when needed.
     - Adding generative conditions based on user input.
 
-## Demo Videos
-To get a quick overview of these demos, you can watch a video demonstration on [YouTube](https://www.youtube.com/embed/jEs21uQ9gvs).
 
 ## How to Use
 You can explore and interact with these demos by visiting the following URLs:
